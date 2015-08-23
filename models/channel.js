@@ -8,7 +8,7 @@ var Channel = thinky.createModel('Channel', {
     dj             : type.string(),
     numListeners   : type.number().default(0),
     pastSongs      : type.array().default([]),
-    skipVoteEnabled: type.boolean(),
+    skipVoteEnabled: type.boolean().default(true),
     skipVotes      : type.number().default(0),
     currentStatus  : {
         playing        : type.boolean(),

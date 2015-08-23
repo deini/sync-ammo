@@ -3,7 +3,7 @@ var thinky = require('../util/thinky.js'),
 
 var User = thinky.createModel('User', {
     id: type.string(),
-    name: type.string().min(3).max(10)
+    name: type.string().min(3).max(30)
 });
 
 module.exports = User;

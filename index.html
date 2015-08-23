@@ -6,7 +6,21 @@
 </head>
 <body>
     <h1>Is this the Dream?</h1>
-    <script>console.log(window.document.cookie)</script>
-    <script>console.log(document.cookie)</script>
+    <script type="text/javascript" src="http://localhost:3000/faye/client.js"> </script>
+
+    <script type="text/javascript">
+        var client = new Faye.Client('http://localhost:3000/faye');
+
+        client.addExtension({
+            outgoing: function(message, callback) {
+                message.cookies = document.cookie;
+                callback(message);
+            }
+        });
+
+        var subscription = client.subscribe('/foo', function(message) {
+            console.log(message);
+        });
+    </script>
 </body>
 </html>
