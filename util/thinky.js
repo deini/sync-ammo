@@ -1,6 +1,8 @@
+var constants = require('../constants');
+
 var thinky = require('thinky')({
-    host: '192.168.99.100',
-    port: 32772
+    host: constants.RETHINK_HOST,
+    port: constants.RETHINK_PORT
 });
 
 module.exports = thinky;

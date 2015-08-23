@@ -1,0 +1,28 @@
+{
+  "name": "sync-ammo",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.13.3",
+    "express-session": "^1.11.3",
+    "faye": "^1.1.2",
+    "session-rethinkdb": "^1.0.6",
+    "thinky": "^2.1.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deini/sync-ammo.git"
+  },
+  "author": "Daniel Almaguer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deini/sync-ammo/issues"
+  },
+  "homepage": "https://github.com/deini/sync-ammo#readme"
+}
