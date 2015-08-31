@@ -6,6 +6,7 @@ var session       = require('express-session');
 var RDBStore      = require('session-rethinkdb')(session);
 var channelHelper = require('./helpers/channel');
 var userHelper    = require('./helpers/user');
+var api           = require('express-api-helper');
 
 var bayeux;
 var store = new RDBStore({
@@ -33,16 +34,17 @@ function setupServer() {
         secret           : 'my5uUperSEC537(key)!',
         store            : store,
         resave           : true,
-        saveUninitialized: true,
-        cookie           : { httpOnly: false }
+        saveUninitialized: true
     }));
 
     //app.use('/js', express.static(path.join(process.cwd(), 'build/js')));
     //app.use('/css', express.static(path.join(process.cwd(), 'build/css')));
+    app.post('/api/:channel/status', setChannelStatus);
+    app.post('/api/channel', findOrCreateChannel);
 
     bayeux.addExtension(checkPermissions());
     bayeux.attach(server);
-    app.use(findOrCreteUser);
+    app.use(setUser);
 
     app.all('/*', function(req, res) {
         // Catch all route to support HTML5Mode
@@ -52,7 +54,50 @@ function setupServer() {
     server.listen(3000);
 }
 
-function findOrCreteUser(req, res, next) {
+function setChannelStatus(req, res) {
+    const user = req.session.user;
+
+    if (!user) {
+        return api.unauthorized(req, res);
+    }
+
+    channelHelper.get(req.params.channel)
+        .then(function(channel) {
+            if (user.id !== channel.dj) {
+                api.unauthorized(req, res);
+            }
+
+            channel.status = req.body.status;
+            channel.save();
+
+            notifyClients(channel);
+
+            return api.ok(req, res, channel);
+        });
+}
+
+function notifyClients(channel) {
+    bayeux.getClient().publish(`/${channel.id}`, {
+        status: channel.status
+    });
+}
+
+function findOrCreateChannel(req, res) {
+        channelHelper.find()
+            .then(function(channel) {
+                req.session.channel = channel.id;
+
+                return api.ok(req, res, channel);
+            })
+            .catch(channelHelper.create({ ownerId: req.session.user.id })
+                .then(function(channel) {
+                    req.session.channel = channel.id;
+
+                    return api.ok(req, res, channel);
+                }));
+}
+
+function setUser(req, res, next) {
     if (req.session.user) {
         console.log('user already exists');
         next();
@@ -68,34 +113,40 @@ function findOrCreteUser(req, res, next) {
 }
 
 function setupListeners() {
-    //bayeux.getClient().publish('/email/new', {
-    //    text: 'New email has arrived!',
-    //    inboxSize: 34
-    //});
-
     bayeux.on('subscribe', function(clientId, channel) {
-        console.log('Got one subscription from: ', clientId);
-        console.log('To channel', channel);
-        channelHelper.incrementListeners('bukis');
+        const channelId = channel.substring(1);
+
+        channelHelper.incrementListeners(channelId);
     });
 
     bayeux.on('unsubscribe', function(clientId, channel) {
-        console.log('UNSUBSCRIBED');
-        channelHelper.decrementListeners('bukis');
+        const channelId = channel.substring(1);
+
+        channelHelper.decrementListeners(channelId);
     });
 }
 
 function checkPermissions() {
-    return {
-        incoming: function(message, request, callback) {
-            // TODO Handle logic of creating new channels
-            // TODO Handle Logic for post just by owner/dj
+    const secret = 'some random hasherino';
 
-            //console.log('server extension');
-            //console.log(message);
-            //console.log(request.headers.cookie);
+    return {
+        incoming: function(message, callback) {
+            if (!message.channel.match(/^\/meta\//)) {
+                const password = message.ext && message.ext.password;
+
+                if (password !== secret) {
+                    message.error = '403::Password required';
+                }
+            }
+            callback(message);
+        },
+
+        outgoing: function(message, callback) {
+            if (message.ext) {
+                delete message.ext.password;
+            }
+
             callback(message);
         }
     };
 }
-

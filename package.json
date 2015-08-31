@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "express": "^4.13.3",
+    "express-api-helper": "0.0.5",
     "express-session": "^1.11.3",
     "faye": "^1.1.2",
     "session-rethinkdb": "^1.0.6",

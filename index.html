@@ -11,13 +11,6 @@
     <script type="text/javascript">
         var client = new Faye.Client('http://localhost:3000/faye');
 
-        client.addExtension({
-            outgoing: function(message, callback) {
-                message.cookies = document.cookie;
-                callback(message);
-            }
-        });
-
         var subscription = client.subscribe('/foo', function(message) {
             console.log(message);
         });

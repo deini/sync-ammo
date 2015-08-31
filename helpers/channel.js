@@ -1,28 +1,38 @@
 var Channel = require('../models/all').Channel;
 
 module.exports = {
+    create: create,
     incrementListeners: incrementListeners,
     decrementListeners: decrementListeners
 };
 
-function incrementListeners(channelName) {
-    Channel.filter({ name: channelName }).run()
-        .then(function(channels) {
-            if (channels[0]) {
-                channels[0].numListeners += 1;
-                channels[0].save();
-            }
-        });
-
-    // TODO: Update the count with next dj message
+function get(id) {
+    return Channel.get(id).run();
 }
 
-function decrementListeners(channelName) {
-    Channel.filter({ name: channelName }).run()
-        .then(function(channels) {
-            if (channels[0]) {
-                channels[0].numListeners -= 1;
-                channels[0].save();
+function create(options) {
+    options = options || {};
+
+    const channel = new Channel(options);
+
+    return channel.save();
+}
+
+function incrementListeners(channelId) {
+    get(channelId)
+        .then(function(channel) {
+            channel.numListeners += 1;
+            channel.save();
+        });
+}
+
+function decrementListeners(channelId) {
+    //Channel.filter({ name: channelName }).run()
+    get(channelId)
+        .then(function(channel) {
+            if (channel) {
+                channel.numListeners -= 1;
+                channel.save();
             }
         });
 }
