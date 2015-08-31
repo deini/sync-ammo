@@ -39,6 +39,7 @@ function setupServer() {
 
     //app.use('/js', express.static(path.join(process.cwd(), 'build/js')));
     //app.use('/css', express.static(path.join(process.cwd(), 'build/css')));
+    app.get('/api/:channel/status', getChannelStatus);
     app.post('/api/:channel/status', setChannelStatus);
     app.post('/api/channel', findOrCreateChannel);
 
@@ -52,6 +53,16 @@ function setupServer() {
     });
 
     server.listen(3000);
+}
+
+function getChannelStatus(req, res) {
+    channelHelper.get(req.params.channel)
+        .then(function(channel) {
+            api.ok(req, res, channel);
+        })
+        .catch(function() {
+            api.notFound(req, res);
+        });
 }
 
 function setChannelStatus(req, res) {
