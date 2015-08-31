@@ -27,7 +27,6 @@ function incrementListeners(channelId) {
 }
 
 function decrementListeners(channelId) {
-    //Channel.filter({ name: channelName }).run()
     get(channelId)
         .then(function(channel) {
             if (channel) {
