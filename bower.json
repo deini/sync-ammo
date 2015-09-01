@@ -9,6 +9,7 @@
   "dependencies": {
     "ui-router": "~0.2.15",
     "angular": "~1.4.3",
-    "lodash": "~3.10.0"
+    "lodash": "~3.10.0",
+    "faye": "~1.1.0"
   }
 }
