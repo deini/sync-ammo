@@ -1,0 +1,14 @@
+{
+  "name": "sync-ammo",
+  "version": "0.0.1",
+  "homepage": "https://github.com/deini/sync-ammo",
+  "authors": [
+    "Daniel Almaguer <danielalmaguer@gmail.com>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "ui-router": "~0.2.15",
+    "angular": "~1.4.3",
+    "lodash": "~3.10.0"
+  }
+}

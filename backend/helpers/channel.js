@@ -1,4 +1,4 @@
-var Channel = require('../models/all').Channel;
+var Channel = require('./all').Channel;
 
 module.exports = {
     create: create,

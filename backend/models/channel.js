@@ -1,4 +1,4 @@
-var thinky = require('../util/thinky'),
+var thinky = require('./thinky'),
     type   = thinky.type;
 
 var Channel = thinky.createModel('Channel', {

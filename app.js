@@ -1,11 +1,11 @@
-var constants     = require('./constants');
+var constants     = require('./backend/constants');
 var express       = require('express');
 var faye          = require('faye');
 var http          = require('http');
 var session       = require('express-session');
 var RDBStore      = require('session-rethinkdb')(session);
-var channelHelper = require('./helpers/channel');
-var userHelper    = require('./helpers/user');
+var channelHelper = require('./backend/helpers/channel');
+var userHelper    = require('./backend/helpers/user');
 var api           = require('express-api-helper');
 
 var bayeux;
@@ -39,6 +39,7 @@ function setupServer() {
 
     //app.use('/js', express.static(path.join(process.cwd(), 'build/js')));
     //app.use('/css', express.static(path.join(process.cwd(), 'build/css')));
+    app.get('/api/user', getUser);
     app.get('/api/:channel/status', getChannelStatus);
     app.post('/api/:channel/status', setChannelStatus);
     app.post('/api/channel', findOrCreateChannel);
@@ -53,6 +54,10 @@ function setupServer() {
     });
 
     server.listen(3000);
+}
+
+function getUser(req, res) {
+    api.ok(req, res, req.session.user);
 }
 
 function getChannelStatus(req, res) {
@@ -89,7 +94,7 @@ function setChannelStatus(req, res) {
 
 function notifyClients(channel) {
     bayeux.getClient().publish(`/${channel.id}`, {
-        status: channel.status
+        status: channel
     });
 }
 
