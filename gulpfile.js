@@ -14,7 +14,7 @@ var paths = {
     build  : 'build',
     dist   : 'dist',
     html   : ['frontend/javascript/**/*.html'],
-    index  : ['frontend/index.html'],
+    index  : ['index.html'],
     scripts: ['frontend/javascript/**/*.js'],
     styles : ['frontend/sass/**/*.scss']
 };
@@ -117,26 +117,6 @@ gulp.task('minifyCss', function() {
         .src(paths.build + '/**/*.css')
         .pipe(minifyCss())
         .pipe(gulp.dest(paths.dist));
-});
-
-/**
- * Copy root files
- */
-gulp.task('rootFiles', function() {
-    return gulp
-        .src(paths.build + '/**/*')
-        .pipe(gulp.dest(paths.dist));
-});
-
-/**
- * Release
- */
-gulp.task('release', function(done) {
-    runSequence(
-        'build',
-        ['uglify', 'minifyCss', 'rootFiles'],
-        done
-    );
 });
 
 /**

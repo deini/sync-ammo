@@ -1,19 +1,17 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Sync Ammo</title>
+    <base href="/">
+    <title>sync-ammo</title>
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="screen"/>
 </head>
 <body>
-    <h1>Is this the Dream?</h1>
-    <script type="text/javascript" src="http://localhost:3000/faye/client.js"> </script>
+<div ng-app="sync-ammo" class="container sync-ammo-container">
+    <div ui-view="main" class="sync-ammo-main"></div>
+</div>
 
-    <script type="text/javascript">
-        var client = new Faye.Client('http://localhost:3000/faye');
-
-        var subscription = client.subscribe('/foo', function(message) {
-            console.log(message);
-        });
-    </script>
+<script src="js/vendor.js"></script>
+<script src="js/templates.js"></script>
+<script src="js/bundle.js"></script>
 </body>
 </html>

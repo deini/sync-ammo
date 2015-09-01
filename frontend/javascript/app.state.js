@@ -3,7 +3,7 @@
 
     angular
         .module('sync-ammo.app.state', [
-            'sync-ammo.spotify.service',
+            'sync-ammo.auth.service',
             'sync-ammo.templates',
             'ui.router'
         ])
@@ -12,7 +12,12 @@
     function syncAmmoState($stateProvider) {
         $stateProvider
             .state('sync-ammo', {
-                abstract: true
+                abstract: true,
+                resolve: {
+                    user: function (auth) {
+                        auth.login();
+                    }
+                }
             });
     }
 })();

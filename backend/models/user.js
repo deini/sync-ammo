@@ -1,4 +1,4 @@
-var thinky = require('./thinky.js'),
+var thinky = require('../util/thinky.js'),
     type = thinky.type;
 
 var User = thinky.createModel('User', {

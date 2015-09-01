@@ -15,15 +15,15 @@
 
             // Services
             'sync-ammo.auth.service',
-            'sync-ammo.firebase.service',
+            'sync-ammo.channel.service',
             'sync-ammo.player.service',
+            'sync-ammo.pubsub.service',
             'sync-ammo.spotify.service',
             'sync-ammo.time.service',
 
             // Directives
 
             // Third party modules
-            'firebase'
         ])
 
         .constant(_, window._)

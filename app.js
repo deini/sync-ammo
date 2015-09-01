@@ -2,6 +2,7 @@ var constants     = require('./backend/constants');
 var express       = require('express');
 var faye          = require('faye');
 var http          = require('http');
+var path          = require('path');
 var session       = require('express-session');
 var RDBStore      = require('session-rethinkdb')(session);
 var channelHelper = require('./backend/helpers/channel');
@@ -37,8 +38,8 @@ function setupServer() {
         saveUninitialized: true
     }));
 
-    //app.use('/js', express.static(path.join(process.cwd(), 'build/js')));
-    //app.use('/css', express.static(path.join(process.cwd(), 'build/css')));
+    app.use('/js', express.static(path.join(process.cwd(), 'build/js')));
+    app.use('/css', express.static(path.join(process.cwd(), 'build/css')));
     app.get('/api/user', getUser);
     app.get('/api/channel/:channel/status', getChannelStatus);
     app.post('/api/channel/:channel/status', setChannelStatus);
@@ -99,27 +100,26 @@ function notifyClients(channel) {
 }
 
 function findOrCreateChannel(req, res) {
-        channelHelper.find()
-            .then(function(channel) {
-                req.session.channel = channel.id;
+    channelHelper.find({ ownerId: req.session.user.id })
+        .then(function(channel) {
+            req.session.channel = channel.id;
 
-                return api.ok(req, res, channel);
-            })
-            .catch(channelHelper.create({ ownerId: req.session.user.id })
+            api.ok(req, res, channel);
+        })
+        .catch(function() {
+            channelHelper.create({ ownerId: req.session.user.id })
                 .then(function(channel) {
                     req.session.channel = channel.id;
 
-                    return api.ok(req, res, channel);
-                }));
+                    api.ok(req, res, channel);
+                });
+        });
 }
 
 function setUser(req, res, next) {
     if (req.session.user) {
-        console.log('user already exists');
         next();
     } else {
-        console.log('creating user');
-
         userHelper.createUser({})
             .then(function(data) {
                 req.session.user = data;

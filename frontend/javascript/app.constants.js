@@ -9,8 +9,8 @@ angular.module('sync-ammo.constants', [])
         EXTENSION_ID: 'opejcnahjldejgcoegkepenfbomiejic',
         HOST: 'https://tpcaahshvs.spotilocal.com:',
         OAUTH_URI: 'http://open.spotify.com/token',
-        PUB_SUB: '/faye',
         REMOTE_PATH: '/remote',
         STARTING_PORT: 4370,
         TOKEN_PATH: '/simplecsrf/token.json?&ref=&cors='
-    });
+    })
+    .constant('PUB_SUB', '/faye');

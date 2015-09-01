@@ -19,8 +19,6 @@
         ctrl.channel = currentChannel;
         ctrl.status = player.getStatus;
 
-        player.setStatus(ctrl.channel.status);
-
         if (ctrl.channel.dj === auth.getUser().id) {
             pollSpotifyStatus();
         } else {

@@ -26,6 +26,8 @@
                 $http.get('/api/user')
                     .then(function(data) {
                         user = data.data;
+
+                        return data;
                     })
                     .catch(function(err) {
                         console.log('Error while trying to log in', err);

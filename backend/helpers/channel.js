@@ -1,10 +1,19 @@
-var Channel = require('./all').Channel;
+var Channel = require('../models/all').Channel;
 
 module.exports = {
     create: create,
+    find: find,
+    get: get,
     incrementListeners: incrementListeners,
     decrementListeners: decrementListeners
 };
+
+function find(options) {
+    return Channel.filter(options).run()
+        .then(function(data) {
+            return data[0];
+        });
+}
 
 function get(id) {
     return Channel.get(id).run();

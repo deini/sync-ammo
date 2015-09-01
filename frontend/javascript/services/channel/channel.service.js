@@ -21,6 +21,8 @@
                 return $http.post('/api/channel')
                     .then(function(data) {
                         channel = data;
+
+                        return data;
                     });
             }
 
@@ -32,6 +34,8 @@
                 return $http.get('/api/channel/' + id)
                     .then(function(data) {
                         channel = data;
+
+                        return data;
                     });
             }
 

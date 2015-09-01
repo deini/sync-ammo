@@ -16,23 +16,13 @@
                 url: '/channel/:channelId',
                 resolve: {
                     currentChannel: function($stateParams, channel) {
-                        if ($stateParams.channelId) {
-                            channel.get($stateParams.channelId)
-                                .then(function(data) {
-                                    return data;
-                                })
-                                .catch(function(err) {
-                                    console.log(err);
-                                });
-                        } else {
-                            channel.create()
-                                .then(function(data) {
-                                    return data;
-                                })
-                                .catch(function(err) {
-                                    console.log(err);
-                                });
-                        }
+                        return channel.get($stateParams.channelId)
+                            .then(function(data) {
+                                return data.data;
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            });
                     }
                 },
                 views: {
