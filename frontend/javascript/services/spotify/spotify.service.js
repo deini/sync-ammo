@@ -104,7 +104,23 @@
             function getStatus() {
                 return makeAuthorizedRequest({
                     url: SPOTIFY.HOST + port + SPOTIFY.REMOTE_PATH + '/status.json'
-                });
+                })
+                    .then(function(data) {
+                            var song = data.track,
+                                status = {};
+
+                            status.playing = data.playing;
+
+                            if (status.playing) {
+                                status.song.name = song.track_resource.name;
+                                status.song.url = song.track_resource.uri;
+                                status.song.artist = song.artist_resource.name;
+                                status.playingPosition = data.playing_position;
+                                // TODO Handle startedAt
+                            }
+
+                        return status;
+                    });
             }
 
             function isReady() {

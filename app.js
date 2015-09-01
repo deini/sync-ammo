@@ -40,8 +40,8 @@ function setupServer() {
     //app.use('/js', express.static(path.join(process.cwd(), 'build/js')));
     //app.use('/css', express.static(path.join(process.cwd(), 'build/css')));
     app.get('/api/user', getUser);
-    app.get('/api/:channel/status', getChannelStatus);
-    app.post('/api/:channel/status', setChannelStatus);
+    app.get('/api/channel/:channel/status', getChannelStatus);
+    app.post('/api/channel/:channel/status', setChannelStatus);
     app.post('/api/channel', findOrCreateChannel);
 
     bayeux.addExtension(checkPermissions());

@@ -3,7 +3,7 @@ var thinky = require('./thinky'),
 
 var Channel = thinky.createModel('Channel', {
     id             : type.string(),
-    name           : type.string().min(3).max(10).default(function() { return this.id; }),
+    name           : type.string().min(3).max(30).default(function() { return this.id; }),
     ownerId        : type.string(),
     dj             : type.string(),
     numListeners   : type.number().default(0),

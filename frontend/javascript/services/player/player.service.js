@@ -3,57 +3,36 @@
 
     angular
         .module('sync-ammo.player.service', [
-            'sync-ammo.constants',
             'sync-ammo.spotify.service'
         ])
         .factory('player', function playerService(spotify) {
             var service = {
-                    getStatus: getStatus,
-                    pause: pause,
-                    play: play,
-                    setStatus: setStatus
-                },
-                status = {
-                    playing: false,
-                    playingPosition: 0,
-                    song: {
-                        name: null,
-                        artist: null,
-                        url: null
-                    },
-                    startedAt: null
+                    handleStatusChange: handleStatusChange
                 };
 
-            function getStatus() {
-                return status;
-            }
+            function handleStatusChange(oldStatus, newStatus) {
+                // If status changes from playing to paused
+                if (oldStatus.playing !== newStatus.playing && !newStatus.playing) {
+                    spotify.pause();
 
-            function pause() {
-                spotify.pause()
-                    .then(function pauseSuccess(data) {
-                        setStatus(data);
-                    });
-            }
-
-            function play(song, timeInSeconds) {
-                spotify.play(song, timeInSeconds)
-                    .then(function playSuccess(data) {
-                        setStatus(data);
-                    });
-            }
-
-            function setStatus(data) {
-                var song = data.track;
-
-                status.playing = data.playing;
-
-                if (status.playing) {
-                    status.song.name = song.track_resource.name;
-                    status.song.url = song.track_resource.uri;
-                    status.song.artist = song.artist_resource.name;
-                    status.playingPosition = data.playing_position;
-                    // TODO Handle startedAt
+                    return true;
                 }
+
+                // Play a different song
+                if (oldStatus.song.url !== newStatus.song.url) {
+                    spotify.play(newStatus.song, newStatus.playingPosition);
+
+                    return true;
+                }
+
+                // If same song detect seek
+                if (Math.abs(oldStatus.playingPosition - newStatus.playingPosition) > 10) {
+                    spotify.play(newStatus.song, newStatus.playingPosition);
+
+                    return true;
+                }
+
+                return false;
             }
 
             return service;
