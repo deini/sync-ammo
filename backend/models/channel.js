@@ -5,7 +5,7 @@ var Channel = thinky.createModel('Channel', {
     id             : type.string(),
     name           : type.string().min(3).max(50).default(function() { return this.id; }),
     ownerId        : type.string(),
-    dj             : type.string(),
+    dj             : type.string().default(function() { return this.ownerId; }),
     numListeners   : type.number().default(0),
     pastSongs      : type.array().default([]),
     skipVoteEnabled: type.boolean().default(true),
