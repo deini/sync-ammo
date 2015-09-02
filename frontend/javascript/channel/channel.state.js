@@ -16,7 +16,7 @@
                 url: '/channel/:channelId',
                 resolve: {
                     currentChannel: function($stateParams, channel) {
-                        return channel.get($stateParams.channelId)
+                        return channel.fetch($stateParams.channelId)
                             .then(function(data) {
                                 return data;
                             })

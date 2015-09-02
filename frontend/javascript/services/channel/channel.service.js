@@ -11,7 +11,9 @@
 
             service = {
                 create: create,
+                fetch: fetch,
                 get: get,
+                getStatus: getStatus,
                 set: set,
                 setStatus: setStatus,
                 setServerStatus: setServerStatus
@@ -20,34 +22,45 @@
             function create() {
                 return $http.post('/api/channel')
                     .then(function(data) {
-                        channel = data;
+                        service.set(data.data);
 
                         return data;
                     });
             }
 
-            function get(id) {
-                if (channel) {
+            function get() {
+                return channel;
+            }
+
+            function fetch(id) {
+                if (channel && channel.id === id) {
                     return $q.when(channel);
                 }
 
                 return $http.get('/api/channel/' + id)
                     .then(function(data) {
-                        channel = data.data;
+                        service.set(data.data);
 
                         return data.data;
                     });
             }
 
-            function set(channel) {
-                return $http.post('/api/channel/' + channel.id, channel);
+            function getStatus() {
+                return channel && channel.status ? channel.status : {};
+            }
+
+            function set(updatedChannel) {
+                channel = updatedChannel;
             }
 
             function setServerStatus(status) {
                 if (needsToUpdateServer(status)) {
                     service.setStatus(status);
 
-                    return $http.post('/api/channel/' + channel.id + '/status', { status: channel.status });
+                    return $http.post('/api/channel/' + channel.id + '/status', { status: channel.status })
+                        .then(function(data) {
+                            service.set(data.data);
+                        });
                 } else {
                     service.setStatus(status);
 

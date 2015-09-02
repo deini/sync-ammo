@@ -9,6 +9,7 @@
     "express-api-helper": "0.0.5",
     "express-session": "^1.11.3",
     "faye": "^1.1.2",
+    "lodash": "^3.10.1",
     "session-rethinkdb": "^1.0.6",
     "thinky": "^2.1.6"
   },

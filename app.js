@@ -1,3 +1,4 @@
+var _             = require('lodash');
 var bodyParser    = require('body-parser');
 var constants     = require('./backend/constants');
 var express       = require('express');
@@ -11,6 +12,7 @@ var userHelper    = require('./backend/helpers/user');
 var api           = require('express-api-helper');
 
 var bayeux;
+var fayeClient;
 var store = new RDBStore({
     servers: [{
         host: constants.RETHINK_HOST,
@@ -30,6 +32,9 @@ function setupServer() {
         server = http.createServer(app);
 
     bayeux = new faye.NodeAdapter({ mount: '/faye' });
+    fayeClient = bayeux.getClient();
+
+    fayeClient.addExtension(setPassword());
 
     app.use(session({
         key              : 'sid',
@@ -76,7 +81,7 @@ function getChannel(req, res) {
 }
 
 function setChannelStatus(req, res) {
-    const user = req.session.user;
+    var user = req.session.user;
 
     if (!user) {
         return api.unauthorized(req, res);
@@ -101,9 +106,7 @@ function setChannelStatus(req, res) {
 }
 
 function notifyClients(channel) {
-    bayeux.getClient().publish('/' + channel.id, {
-        status: channel
-    });
+    fayeClient.publish('/' + channel.id, _.assign({}, channel));
 }
 
 function findOrCreateChannel(req, res) {
@@ -137,25 +140,37 @@ function setUser(req, res, next) {
 
 function setupListeners() {
     bayeux.on('subscribe', function(clientId, channel) {
-        const channelId = channel.substring(1);
+        var channelId = channel.substring(1);
 
         channelHelper.incrementListeners(channelId);
     });
 
     bayeux.on('unsubscribe', function(clientId, channel) {
-        const channelId = channel.substring(1);
+        var channelId = channel.substring(1);
 
         channelHelper.decrementListeners(channelId);
     });
 }
 
+function setPassword() {
+    return {
+        outgoing: function (message, callback) {
+            message.ext          = message.ext || {};
+            message.ext.password = 'some random hasherino';
+            callback(message);
+        }
+    };
+}
+
 function checkPermissions() {
-    const secret = 'some random hasherino';
+    var secret = 'some random hasherino';
 
     return {
         incoming: function(message, callback) {
+            var password;
+
             if (!message.channel.match(/^\/meta\//)) {
-                const password = message.ext && message.ext.password;
+                password = message.ext && message.ext.password;
 
                 if (password !== secret) {
                     message.error = '403::Password required';

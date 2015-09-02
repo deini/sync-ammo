@@ -12,16 +12,17 @@
         ])
         .controller('ChannelController', ChannelController);
 
-    function ChannelController($interval, auth, channel, currentChannel, player, pubsub, spotify) {
+    function ChannelController($interval, auth, channel, player, pubsub, spotify) {
         var ctrl = this,
             subscription;
 
-        ctrl.channel = currentChannel;
-        ctrl.status = player.getStatus;
+        ctrl.channel = channel.get;
 
-        if (ctrl.channel.dj === auth.getUser().id) {
+        if (ctrl.channel().dj === auth.getUser().id) {
+            ctrl.isDj = true;
             pollSpotifyStatus();
         } else {
+            ctrl.isDj = false;
             subscribeToUpdates();
         }
 
@@ -35,10 +36,10 @@
         }
 
         function subscribeToUpdates() {
-            subscription = pubsub.getClient().subscribe('/' + ctrl.channel.id, function (data) {
+            subscription = pubsub.getClient().subscribe('/' + ctrl.channel().id, function(data) {
                 var oldStatus = _.cloneDeep(channel.getStatus());
 
-                channel.setStatus(data.status);
+                channel.set(data);
                 player.handleStatusChange(oldStatus, data.status);
             });
         }

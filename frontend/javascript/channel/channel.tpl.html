@@ -1,21 +1,25 @@
-<h1 ng-if="!channelController.isAdmin">Now Playing</h1>
-<h1 ng-if="channelController.isAdmin"><div class="channel-onAir"></div>On Air</h1>
+<h1 ng-if="!channelController.isDj">Now Playing</h1>
+<h1 ng-if="channelController.isDj"><div class="channel-onAir"></div>On Air</h1>
 
-<h5>Share this page to invite friends to this channel. <img class="channel-shareArrow" src="http://www2.psd100.com/ppp/2013/09/2601/Up-arrow-symbol-icon-0926015328.png"></img></h5>
+<h5>Share this page to invite friends to this channel. <img class="channel-shareArrow" src="http://www.thai2english.com/img/drawn-up-arrow.png"></img></h5>
 
 <table class="u-full-width">
-  <thead>
+    <thead>
     <tr>
-      <th>Title</th>
-      <th>Artist</th>
-      <th>Spotify URL</th>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Spotify URL</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     <tr>
-      <td>{{ channel.currentStatus.song.name }}</td>
-      <td>{{ channel.currentStatus.song.artist }}</td>
-      <td><a ng-href="{{ channel.currentStatus.song.url}}"/>Spotify URL</td>
+        <td>{{ channelController.channel().status.song.name }}</td>
+        <td>{{ channelController.channel().status.song.artist }}</td>
+        <td>
+            <a ng-href="{{ channelController.channel().status.song.url}}">Spotify URL</a>
+        </td>
     </tr>
-  </tbody>
+    </tbody>
 </table>
+
+<h5>Current Listeners: {{ channelController.channel().numListeners }}</h5>
