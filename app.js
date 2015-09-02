@@ -41,7 +41,8 @@ function setupServer() {
     app.use('/js', express.static(path.join(process.cwd(), 'build/js')));
     app.use('/css', express.static(path.join(process.cwd(), 'build/css')));
     app.get('/api/user', getUser);
-    app.get('/api/channel/:channel/status', getChannelStatus);
+    app.get('/api/channel/:channel/status', getChannel);
+    app.get('/api/channel/:channel', getChannel);
     app.post('/api/channel/:channel/status', setChannelStatus);
     app.post('/api/channel', findOrCreateChannel);
 
@@ -61,7 +62,7 @@ function getUser(req, res) {
     api.ok(req, res, req.session.user);
 }
 
-function getChannelStatus(req, res) {
+function getChannel(req, res) {
     channelHelper.get(req.params.channel)
         .then(function(channel) {
             api.ok(req, res, channel);
