@@ -44,10 +44,14 @@
             }
 
             function setServerStatus(status) {
-                service.setStatus(status);
-
                 if (needsToUpdateServer(status)) {
+                    service.setStatus(status);
+
                     return $http.post('/api/channel/' + channel.id + '/status', channel.status);
+                } else {
+                    service.setStatus(status);
+
+                    return $q.when(status);
                 }
             }
 
@@ -56,6 +60,11 @@
             }
 
             function needsToUpdateServer(status) {
+                // If it's the first run
+                if (!channel || !channel.status) {
+                    return true;
+                }
+
                 // If is a different Song
                 if (channel.status.song.url !== status.song.url) {
                     return true;
