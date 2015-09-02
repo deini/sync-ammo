@@ -1,3 +1,4 @@
+var bodyParser    = require('body-parser');
 var constants     = require('./backend/constants');
 var express       = require('express');
 var faye          = require('faye');
@@ -37,6 +38,8 @@ function setupServer() {
         resave           : true,
         saveUninitialized: true
     }));
+
+    app.use(bodyParser.json());
 
     app.use('/js', express.static(path.join(process.cwd(), 'build/js')));
     app.use('/css', express.static(path.join(process.cwd(), 'build/css')));
@@ -91,6 +94,9 @@ function setChannelStatus(req, res) {
             notifyClients(channel);
 
             return api.ok(req, res, channel);
+        })
+        .catch(function(err) {
+            return api.badRequest(req, res, err);
         });
 }
 

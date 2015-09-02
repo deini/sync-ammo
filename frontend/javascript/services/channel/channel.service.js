@@ -47,7 +47,7 @@
                 if (needsToUpdateServer(status)) {
                     service.setStatus(status);
 
-                    return $http.post('/api/channel/' + channel.id + '/status', channel.status);
+                    return $http.post('/api/channel/' + channel.id + '/status', { status: channel.status });
                 } else {
                     service.setStatus(status);
 
