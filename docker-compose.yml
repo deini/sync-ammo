@@ -1,0 +1,19 @@
+rethinkdb:
+  image: rethinkdb
+  ports:
+   - "8080:8080"
+   - "28015:28015"
+   - "29015:29015"
+  volumes:
+   - ./db_data:/data
+  restart: always
+node:
+  build: ./dockerfiles/node
+  ports:
+   - "3000:3000"
+  working_dir: /code
+  volumes:
+   - .:/code
+  links:
+   - rethinkdb
+  restart: always

@@ -94,7 +94,7 @@ function setChannelStatus(req, res) {
 }
 
 function notifyClients(channel) {
-    bayeux.getClient().publish(`/${channel.id}`, {
+    bayeux.getClient().publish('/' + channel.id, {
         status: channel
     });
 }

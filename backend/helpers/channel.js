@@ -20,9 +20,11 @@ function get(id) {
 }
 
 function create(options) {
+    var channel;
+
     options = options || {};
 
-    const channel = new Channel(options);
+    channel = new Channel(options);
 
     return channel.save();
 }
