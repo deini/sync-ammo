@@ -33,9 +33,9 @@
 
                 return $http.get('/api/channel/' + id)
                     .then(function(data) {
-                        channel = data;
+                        channel = data.data;
 
-                        return data;
+                        return data.data;
                     });
             }
 

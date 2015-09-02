@@ -18,7 +18,7 @@
                     currentChannel: function($stateParams, channel) {
                         return channel.get($stateParams.channelId)
                             .then(function(data) {
-                                return data.data;
+                                return data;
                             })
                             .catch(function(err) {
                                 console.log(err);
