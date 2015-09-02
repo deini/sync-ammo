@@ -107,7 +107,9 @@
                 })
                     .then(function(data) {
                             var song = data.track,
-                                status = {};
+                                status = {
+                                    song: {}
+                                };
 
                             status.playing = data.playing;
 
