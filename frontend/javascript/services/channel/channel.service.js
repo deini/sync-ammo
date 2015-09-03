@@ -14,9 +14,10 @@
                 fetch: fetch,
                 get: get,
                 getStatus: getStatus,
+                needsToUpdateServer: needsToUpdateServer,
                 set: set,
                 setStatus: setStatus,
-                setServerStatus: setServerStatus
+                setServerChannel: setServerChannel
             };
 
             function create() {
@@ -33,9 +34,9 @@
             }
 
             function fetch(id) {
-                if (channel && channel.id === id) {
-                    return $q.when(channel);
-                }
+                //if (channel && channel.id === id) {
+                //    return $q.when(channel);
+                //}
 
                 return $http.get('/api/channel/' + id)
                     .then(function(data) {
@@ -53,20 +54,13 @@
                 channel = updatedChannel;
             }
 
-            function setServerStatus(status) {
-                if (needsToUpdateServer(status)) {
-                    service.setStatus(status);
-
-                    return $http.post('/api/channel/' + channel.id + '/status', { status: channel.status })
-                        .then(function(data) {
-                            service.set(data.data);
-                        });
-                } else {
-                    service.setStatus(status);
-
-                    return $q.when(status);
-                }
+            function setServerChannel(updatedChannel) {
+                return $http.post('/api/channel/' + channel.id, updatedChannel)
+                    .then(function(data) {
+                        service.set(data.data);
+                    });
             }
+
 
             function setStatus(status) {
                 channel.status = status;
@@ -80,6 +74,7 @@
 
                 // If is a different Song
                 if (channel.status.song.url !== status.song.url) {
+
                     return true;
                 }
 

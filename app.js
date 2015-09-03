@@ -51,7 +51,7 @@ function setupServer() {
     app.get('/api/user', getUser);
     app.get('/api/channel/:channel/status', getChannel);
     app.get('/api/channel/:channel', getChannel);
-    app.post('/api/channel/:channel/status', setChannelStatus);
+    app.post('/api/channel/:channel', setChannel);
     app.post('/api/channel', findOrCreateChannel);
 
     bayeux.addExtension(checkPermissions());
@@ -80,7 +80,7 @@ function getChannel(req, res) {
         });
 }
 
-function setChannelStatus(req, res) {
+function setChannel(req, res) {
     var user = req.session.user;
 
     if (!user) {
@@ -93,9 +93,14 @@ function setChannelStatus(req, res) {
                 api.unauthorized(req, res);
             }
 
-            channel.status = req.body.status;
-            channel.save();
+            channelHelper.updatePastSongs(channel, req.body);
+            channelHelper.removeRestrictedProperties(req.body);
 
+            _.assign(channel, req.body);
+
+            return channel.save();
+        })
+        .then(function(channel) {
             notifyClients(channel);
 
             return api.ok(req, res, channel);

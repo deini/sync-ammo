@@ -3,6 +3,13 @@
 
 <h5>Share this page to invite friends to this channel. <img class="channel-shareArrow" src="http://www.thai2english.com/img/drawn-up-arrow.png"></img></h5>
 
+<div ng-if="!channelController.isDj">
+    <button ng-if="channelController.inSync" ng-click="channelController.cancelSubscription()">Stop Sync</button>
+    <button ng-if="!channelController.inSync" ng-click="channelController.reSubscribe()">Start Sync</button>
+</div>
+
+<h5>Current Listeners: {{ channelController.channel().numListeners }}</h5>
+
 <table class="u-full-width">
     <thead>
     <tr>
@@ -19,7 +26,13 @@
             <a ng-href="{{ channelController.channel().status.song.url}}">Spotify URL</a>
         </td>
     </tr>
+    <tr ng-repeat="song in channelController.channel().pastSongs">
+        <td>{{ song.name }}</td>
+        <td>{{ song.artist }}</td>
+        <td>
+            <a ng-href="{{ song.url}}">Spotify URL</a>
+        </td>
+    </tr>
     </tbody>
 </table>
 
-<h5>Current Listeners: {{ channelController.channel().numListeners }}</h5>

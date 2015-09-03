@@ -5,7 +5,9 @@ module.exports = {
     find: find,
     get: get,
     incrementListeners: incrementListeners,
-    decrementListeners: decrementListeners
+    decrementListeners: decrementListeners,
+    removeRestrictedProperties: removeRestrictedProperties,
+    updatePastSongs: updatePastSongs
 };
 
 function find(options) {
@@ -45,4 +47,23 @@ function decrementListeners(channelId) {
                 channel.save();
             }
         });
+}
+
+function removeRestrictedProperties(channel) {
+    delete(channel.numListeners);
+    delete(channel.pastSongs);
+}
+
+function updatePastSongs(channel, newChannel) {
+    if (!channel.status || !channel.status.song) {
+        return;
+    }
+
+    if (channel.status.song.url !== newChannel.status.song.url) {
+        channel.pastSongs.unshift(channel.status.song);
+    }
+
+    if (channel.pastSongs.length > 10) {
+        channel.pastSongs.pop();
+    }
 }

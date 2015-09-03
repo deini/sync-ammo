@@ -7,8 +7,15 @@
         ])
         .factory('player', function playerService(spotify) {
             var service = {
+                    handleInitialStatus: handleInitialStatus,
                     handleStatusChange: handleStatusChange
                 };
+
+            function handleInitialStatus(status) {
+                if (status.playing) {
+                    spotify.play(status.song, status.playingPosition);
+                }
+            }
 
             function handleStatusChange(oldStatus, newStatus) {
                 // If status changes from playing to paused
