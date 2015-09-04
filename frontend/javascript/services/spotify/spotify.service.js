@@ -116,6 +116,7 @@
                             if (status.playing) {
                                 status.song.name = song.track_resource.name;
                                 status.song.url = song.track_resource.uri;
+                                status.song.webUrl = song.track_resource.location.og;
                                 status.song.artist = song.artist_resource.name;
                                 status.playingPosition = data.playing_position;
                                 // TODO Handle startedAt
@@ -144,13 +145,13 @@
                     params: tokens
                 });
 
-                console.log(options);
-
                 chrome.runtime.sendMessage(extensionId, options, function(response) {
                     // .error .data
                     if (response.error) {
                         deferred.reject(response.error);
                     }
+
+                    console.log(response.data);
 
                     deferred.resolve(response.data);
                 });

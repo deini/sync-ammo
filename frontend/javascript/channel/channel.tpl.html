@@ -1,7 +1,7 @@
 <h1 ng-if="!channelController.isDj">Now Playing</h1>
 <h1 ng-if="channelController.isDj"><div class="channel-onAir"></div>On Air</h1>
 
-<h5>Share this page to invite friends to this channel. <img class="channel-shareArrow" src="http://www.thai2english.com/img/drawn-up-arrow.png"></img></h5>
+<h5>Share this page to invite friends to this channel. <img class="channel-shareArrow" src="http://www.thai2english.com/img/drawn-up-arrow.png" /></h5>
 
 <div ng-if="!channelController.isDj">
     <button ng-if="channelController.inSync" ng-click="channelController.cancelSubscription()">Stop Sync</button>
@@ -15,7 +15,7 @@
     <tr>
         <th>Title</th>
         <th>Artist</th>
-        <th>Spotify URL</th>
+        <th>Spotify</th>
     </tr>
     </thead>
     <tbody>
@@ -23,14 +23,14 @@
         <td>{{ channelController.channel().status.song.name }}</td>
         <td>{{ channelController.channel().status.song.artist }}</td>
         <td>
-            <a ng-href="{{ channelController.channel().status.song.url}}">Spotify URL</a>
+            <a ng-href="{{ channelController.channel().status.song.webUrl}}" target="_blank">Play</a>
         </td>
     </tr>
     <tr ng-repeat="song in channelController.channel().pastSongs">
         <td>{{ song.name }}</td>
         <td>{{ song.artist }}</td>
         <td>
-            <a ng-href="{{ song.url}}">Spotify URL</a>
+            <a ng-href="{{ song.webUrl}}" target="_blank">Play</a>
         </td>
     </tr>
     </tbody>

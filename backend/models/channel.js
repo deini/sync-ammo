@@ -14,9 +14,10 @@ var Channel = thinky.createModel('Channel', {
         playing        : type.boolean(),
         playingPosition: type.number(),
         song           : {
-            name  : type.string(),
-            artist: type.string(),
-            url   : type.string()
+            name   : type.string(),
+            artist : type.string(),
+            url    : type.string(),
+            webUrl : type.string()
         },
         startedAt      : type.date()
     }

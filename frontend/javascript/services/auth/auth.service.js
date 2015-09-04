@@ -12,8 +12,6 @@
                 login: login
             };
 
-            login();
-
             function getUser() {
                 return user;
             }
@@ -27,7 +25,7 @@
                     .then(function(data) {
                         user = data.data;
 
-                        return data;
+                        return user;
                     })
                     .catch(function(err) {
                         console.log('Error while trying to log in', err);
