@@ -1,6 +1,7 @@
 // Dependencies
 var concat         = require('gulp-concat'),
     del            = require('del'),
+    flatten        = require('gulp-flatten'),
     gulp           = require('gulp'),
     mainBowerFiles = require('main-bower-files'),
     minifyCss      = require('gulp-minify-css'),
@@ -11,12 +12,13 @@ var concat         = require('gulp-concat'),
 
 // Paths
 var paths = {
-    build  : 'build',
-    dist   : 'dist',
-    html   : ['frontend/javascript/**/*.html'],
-    index  : ['index.html'],
-    scripts: ['frontend/javascript/**/*.js'],
-    styles : ['frontend/sass/**/*.scss']
+    build        : 'build',
+    dist         : 'dist',
+    html         : ['frontend/javascript/**/*.html'],
+    index        : ['index.html'],
+    scripts      : ['frontend/javascript/**/*.js'],
+    styles       : ['frontend/sass/**/*.scss'],
+    vendorStyles : ['bower_components/materialize/sass']
 };
 
 /**
@@ -55,8 +57,20 @@ gulp.task('vendor-styles', function() {
 gulp.task('styles', function() {
     return gulp
         .src(paths.styles)
-        .pipe(sass())
+        .pipe(sass({
+            style: 'compressed',
+            includePaths: paths.vendorStyles
+        }))
         .pipe(gulp.dest(paths.build + '/css'));
+});
+
+/**
+ * Copy fonts
+ */
+gulp.task('fonts', function () {
+    return gulp.src(mainBowerFiles('**/*.{eot,svg,ttf,woff,woff2}'), { base: 'bower_components' })
+        .pipe(flatten())
+        .pipe(gulp.dest(paths.build + '/fonts'));
 });
 
 /**
@@ -65,12 +79,6 @@ gulp.task('styles', function() {
 gulp.task('index', function() {
     return gulp
         .src(paths.index[0])
-        .pipe(gulp.dest(paths.build));
-});
-
-gulp.task('cname', function() {
-    return gulp
-        .src(paths.index[1])
         .pipe(gulp.dest(paths.build));
 });
 
@@ -94,7 +102,7 @@ gulp.task('clean', function(done) {
 gulp.task('build', function(done) {
     runSequence(
         'clean',
-        ['vendor-scripts', 'vendor-styles', 'scripts', 'styles', 'index', 'html'],
+        ['vendor-scripts', 'vendor-styles', 'scripts', 'fonts', 'styles', 'index', 'html'],
         done
     );
 });

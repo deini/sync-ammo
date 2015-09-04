@@ -1,4 +1,7 @@
-@import "shame/shame";
+$icons-font-path: '../fonts/';
+$roboto-font-path: 'fonts/';
+
+@import "materialize";
 @import "home/colors";
 @import "home/home";
 

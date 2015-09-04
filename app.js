@@ -48,6 +48,7 @@ function setupServer() {
 
     app.use('/js', express.static(path.join(process.cwd(), 'build/js')));
     app.use('/css', express.static(path.join(process.cwd(), 'build/css')));
+    app.use('/fonts', express.static(path.join(process.cwd(), 'build/fonts')));
     app.get('/api/user', getUser);
     app.get('/api/channel/:channel/status', getChannel);
     app.get('/api/channel/:channel', getChannel);
