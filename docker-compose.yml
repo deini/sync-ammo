@@ -1,19 +1,22 @@
 rethinkdb:
   image: rethinkdb
   ports:
-   - "8080:8080"
-   - "28015:28015"
-   - "29015:29015"
+    - "8080:8080"
+    - "28015:28015"
+    - "29015:29015"
   volumes:
-   - ./db_data:/data
+    - ./db_data:/data
   restart: always
 node:
   build: ./dockerfiles/node
   ports:
-   - "3000:3000"
+    - "3000:3000"
   working_dir: /code
   volumes:
-   - .:/code
+    - .:/code
   links:
-   - rethinkdb
+    - rethinkdb
   restart: always
+  environment:
+    - VIRTUAL_HOST=sync.ammo.io
+    - VIRTUAL_PORT=80
