@@ -146,12 +146,9 @@
                 });
 
                 chrome.runtime.sendMessage(extensionId, options, function(response) {
-                    // .error .data
                     if (response.error) {
                         deferred.reject(response.error);
                     }
-
-                    console.log(response.data);
 
                     deferred.resolve(response.data);
                 });

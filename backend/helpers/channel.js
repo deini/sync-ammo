@@ -59,7 +59,7 @@ function updatePastSongs(channel, newChannel) {
         return;
     }
 
-    if (channel.status.song.url !== newChannel.status.song.url) {
+    if (channel.status.song.url && channel.status.song.url !== newChannel.status.song.url) {
         channel.pastSongs.unshift(channel.status.song);
     }
 
