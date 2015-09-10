@@ -6,10 +6,11 @@
             'sync-ammo.constants',
             'sync-ammo.time.service'
         ])
-        .factory('spotify', function spotifyService($q, $timeout, SPOTIFY, time) {
+        .factory('spotify', function spotifyService($http, $q, $timeout, SPOTIFY, time) {
             var initialized = false,
                 service = {
                     getStatus: getStatus,
+                    getImage: getImage,
                     isReady: isReady,
                     pause: pause,
                     play: play
@@ -123,6 +124,26 @@
                             }
 
                         return status;
+                    });
+            }
+
+            function getImage(status) {
+                var songId,
+                    songUrl;
+
+                if (!status || !status.song || !status.song.url) {
+                    return $q.when('');
+                }
+
+                songUrl = status.song.url;
+                songId = songUrl.substr(songUrl.lastIndexOf(':') + 1);
+
+                return $http.get('https://api.spotify.com/v1/tracks/' + songId, { withCredentials: false })
+                    .then(function spotifySuccess(data) {
+                        return data.data.album.images[1];
+                    })
+                    .catch(function spotifyCatch() {
+                        return '';
                     });
             }
 

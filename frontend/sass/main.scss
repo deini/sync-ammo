@@ -1,38 +1,10 @@
-$icons-font-path: '../fonts/';
-$roboto-font-path: 'fonts/';
+$roboto-font-path: '/fonts/';
 
-@import "materialize";
-@import "home/colors";
+@import "materialize/materialize";
 @import "home/home";
+@import "channel/channel";
 
-.sync-ammo-container {
-  padding: 3rem;
+body {
+  background-color: #ADD8E6;
 }
 
-.sync-ammo-main {
-  min-height: 100%;
-}
-
-.channel-shareArrow {
-  display: inline-block;
-  position: absolute;
-  transform: translateY(-65%) rotate(9deg);
-  width: 45px;
-  padding-left: 1rem;
-}
-
-@-webkit-keyframes pulse  {
-  0% {background-color: #CC0000;}
-  50% {background-color: #7b0000;}
-  100% {background-color: #CC0000;}
-}
-
-.channel-onAir {
-  display: inline-block;
-  margin-right: 1rem;
-  border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
-  background-color: #990000;
-  -webkit-animation: pulse 3s ease -3s infinite;
-}

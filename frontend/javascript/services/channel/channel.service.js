@@ -34,10 +34,6 @@
             }
 
             function fetch(id) {
-                //if (channel && channel.id === id) {
-                //    return $q.when(channel);
-                //}
-
                 return $http.get('/api/channel/' + id)
                     .then(function(data) {
                         service.set(data.data);

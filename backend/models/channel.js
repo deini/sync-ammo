@@ -16,6 +16,7 @@ var Channel = thinky.createModel('Channel', {
         song           : {
             name   : type.string(),
             artist : type.string(),
+            image  : type.string(),
             url    : type.string(),
             webUrl : type.string()
         },

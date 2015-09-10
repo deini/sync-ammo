@@ -1,49 +1,59 @@
-<h1 ng-if="!channelController.isDj">Now Playing</h1>
-<h1 ng-if="channelController.isDj"><div class="channel-onAir"></div>On Air</h1>
-
-<h5>Share this page to invite friends to this channel. <img class="channel-shareArrow" src="http://www.thai2english.com/img/drawn-up-arrow.png" /></h5>
-
-<div ng-if="!channelController.isDj">
-    <button ng-if="channelController.inSync" ng-click="channelController.cancelSubscription()">Stop Sync</button>
-    <button ng-if="!channelController.inSync" ng-click="channelController.reSubscribe()">Start Sync</button>
-</div>
-
-<h5>Current Listeners: {{ channelController.channel().numListeners }}</h5>
-
-<table class="channel-table">
-    <thead>
-    <tr>
-        <th>Title</th>
-        <th>Artist</th>
-        <th>Spotify</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>{{ channelController.channel().status.song.name }}</td>
-        <td>{{ channelController.channel().status.song.artist }}</td>
-        <td>
-            <a ng-href="{{ channelController.channel().status.song.webUrl}}" target="_blank">Play</a>
-        </td>
-    </tr>
-    <tr ng-repeat="song in channelController.channel().pastSongs">
-        <td>{{ song.name }}</td>
-        <td>{{ song.artist }}</td>
-        <td>
-            <a ng-href="{{ song.webUrl}}" target="_blank">Play</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<header class="valign-wrapper">
+    <h2 ng-if="!channelController.isDj">Now Playing</h2>
+    <div class="valign-wrapper" ng-if="channelController.isDj">
+        <i class="medium material-icons red-text">settings_input_antenna</i>
+        <h2 class="channel-heading">On Air</h2>
+    </div>
+    <h5 class="channel-numListeners">
+        {{ channelController.channel().numListeners }}
+        <ng-pluralize
+                count="{{ channelController.channel().numListeners }}"
+                when="{ '1': 'listener', 'other': 'listeners'}">
+        </ng-pluralize>
+    </h5>
+</header>
 
 
-<!--<ul class="collection">-->
-    <!--<li class="collection-item avatar">-->
-        <!--<i class="material-icons circle red">play_arrow</i>-->
-        <!--<span class="title">{{ channelController.channel().status.song.name }}</span>-->
-        <!--<p>First Line <br>-->
-            <!--Second Line-->
-        <!--</p>-->
-        <!--<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>-->
-    <!--</li>-->
-<!--</ul>-->
+<!--<img class="channel-shareArrow" src="http://www.thai2english.com/img/drawn-up-arrow.png" />-->
+<!--<h5>Share this page to invite friends to this channel.</h5>-->
+
+<section class="card-panel blue lighten-1 white-text row valign-wrapper">
+    <div class="col s2 valign">
+        <img class="circle channel-currentLogo" ng-src="{{ channelController.channel().status.song.image }}" alt=""/>
+    </div>
+    <div class="col s10 valign">
+        <h5>{{ channelController.channel().status.song.name }}</h5>
+        <h5>{{ channelController.channel().status.song.artist }}</h5>
+    </div>
+</section>
+
+<section>
+    <div>
+        <h5 class="left">Past Songs</h5>
+        <div class="right" ng-if="!channelController.isDj">
+            <button class="waves-effect waves-light btn" ng-if="channelController.inSync" ng-click="channelController.cancelSubscription()">Stop Sync</button>
+            <button class="waves-effect waves-light btn" ng-if="!channelController.inSync" ng-click="channelController.reSubscribe()">Start Sync</button>
+        </div>
+    </div>
+
+    <table class="striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th class="center-align">Spotify</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="song in channelController.channel().pastSongs">
+            <td>{{ song.name }}</td>
+            <td>{{ song.artist }}</td>
+            <td class="center-align">
+                <a ng-href="{{ song.webUrl}}" target="_blank">
+                    <i class="material-icons">play_arrow</i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>

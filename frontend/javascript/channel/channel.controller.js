@@ -42,8 +42,12 @@
                 spotify.getStatus()
                     .then(function pollIntervalSuccess(status) {
                         if (channel.needsToUpdateServer(status)) {
-                            channel.setStatus(status);
-                            channel.setServerChannel(channel.get());
+                            spotify.getImage(status)
+                                .then(function(data) {
+                                    status.song.image = data.url;
+                                    channel.setStatus(status);
+                                    channel.setServerChannel(channel.get());
+                                });
                         } else {
                             channel.setStatus(status);
                         }
