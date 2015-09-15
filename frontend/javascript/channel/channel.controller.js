@@ -34,6 +34,7 @@
                 player.handleInitialStatus(ctrl.channel().status);
 
                 subscribeToUpdates();
+                pollClientStatus();
             }
         }
 
@@ -51,6 +52,32 @@
                         } else {
                             channel.setStatus(status);
                         }
+                    });
+            }, 2000);
+        }
+
+        // TODO Refactor this mess & duplication
+        function pollClientStatus() {
+            $interval(function pollInterval() {
+                spotify.getStatus()
+                    .then(function pollIntervalSuccess(status) {
+                        var syncedStatus = channel.getStatus();
+
+                        if (!status || !status.playing) {
+                            return;
+                        }
+
+                        if (status.song.url !== syncedStatus.song.url) {
+                            return;
+                        }
+
+                        _.defaultsDeep(status, syncedStatus);
+
+                        syncedStatus.playingPosition = player.calculatePlayingPosition(syncedStatus);
+
+                        player.handleStatusChange(status, syncedStatus);
+
+                        channel.setStatus(syncedStatus);
                     });
             }, 2000);
         }
