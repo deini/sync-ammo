@@ -11,3 +11,15 @@
   margin-left: 15px;
 }
 
+@keyframes pulse {
+  0% { color: color("red", "base"); }
+  50% { color: color("red", "darken-4"); }
+  100% { color: color("red", "base"); }
+}
+
+.channel-onAir {
+  @include animation-name(pulse);
+  @include animation-duration(3s);
+  @include animation-iteration-count(infinite);
+}
+
