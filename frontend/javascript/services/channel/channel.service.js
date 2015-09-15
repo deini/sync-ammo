@@ -51,6 +51,8 @@
             }
 
             function setServerChannel(updatedChannel) {
+                updatedChannel.status.updatedAt = Date.now();
+
                 return $http.post('/api/channel/' + channel.id, updatedChannel)
                     .then(function(data) {
                         service.set(data.data);
@@ -59,6 +61,8 @@
 
 
             function setStatus(status) {
+                status.updatedAt = Date.now();
+
                 channel.status = status;
             }
 

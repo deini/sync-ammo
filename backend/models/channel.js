@@ -20,7 +20,7 @@ var Channel = thinky.createModel('Channel', {
             url    : type.string(),
             webUrl : type.string()
         },
-        startedAt      : type.date()
+        updatedAt      : type.date()
     }
 });
 

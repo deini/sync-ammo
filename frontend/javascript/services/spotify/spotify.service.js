@@ -120,7 +120,6 @@
                                 status.song.webUrl = song.track_resource.location.og;
                                 status.song.artist = song.artist_resource.name;
                                 status.playingPosition = data.playing_position;
-                                // TODO Handle startedAt
                             }
 
                         return status;

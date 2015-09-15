@@ -7,13 +7,14 @@
         ])
         .factory('player', function playerService(spotify) {
             var service = {
-                    handleInitialStatus: handleInitialStatus,
-                    handleStatusChange: handleStatusChange
-                };
+                calculatePlayingPosition: calculatePlayingPosition,
+                handleInitialStatus: handleInitialStatus,
+                handleStatusChange: handleStatusChange
+            };
 
             function handleInitialStatus(status) {
                 if (status.playing) {
-                    spotify.play(status.song, status.playingPosition);
+                    spotify.play(status.song, service.calculatePlayingPosition(status));
                 }
             }
 
@@ -40,6 +41,15 @@
                 }
 
                 return false;
+            }
+
+            function calculatePlayingPosition(status) {
+                var currentTime = Date.now(),
+                    updatedAt;
+
+                updatedAt = new Date(status.updatedAt).getTime();
+
+                return status.playingPosition + (currentTime - updatedAt) / 1000;
             }
 
             return service;
