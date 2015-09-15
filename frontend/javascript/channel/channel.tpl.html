@@ -7,7 +7,7 @@
     <h5 class="channel-numListeners">
         {{ channelController.channel().numListeners }}
         <ng-pluralize
-                count="{{ channelController.channel().numListeners }}"
+                count="channelController.channel().numListeners"
                 when="{ '1': 'listener', 'other': 'listeners'}">
         </ng-pluralize>
     </h5>
