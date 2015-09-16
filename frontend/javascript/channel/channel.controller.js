@@ -14,6 +14,7 @@
 
     function ChannelController($interval, $state, $stateParams, auth, channel, player, pubsub, spotify) {
         var ctrl = this,
+            pollInterval,
             subscription;
 
         ctrl.inSync = true;
@@ -27,59 +28,55 @@
             if (ctrl.channel().dj === auth.getUser().id) {
                 ctrl.isDj = true;
 
-                pollSpotifyStatus();
+                pollSpotifyStatus(updateChannelStatus);
             } else {
                 ctrl.isDj = false;
 
                 player.handleInitialStatus(ctrl.channel().status);
 
                 subscribeToUpdates();
-                pollClientStatus();
+                pollSpotifyStatus(keepClientInSync);
             }
         }
 
-        function pollSpotifyStatus() {
-            $interval(function pollInterval() {
+        function pollSpotifyStatus(callback) {
+            pollInterval = $interval(function pollInterval() {
                 spotify.getStatus()
-                    .then(function pollIntervalSuccess(status) {
-                        if (channel.needsToUpdateServer(status)) {
-                            spotify.getImage(status)
-                                .then(function(data) {
-                                    status.song.image = data.url;
-                                    channel.setStatus(status);
-                                    channel.setServerChannel(channel.get());
-                                });
-                        } else {
-                            channel.setStatus(status);
-                        }
-                    });
+                    .then(callback);
             }, 2000);
         }
 
-        // TODO Refactor this mess & duplication
-        function pollClientStatus() {
-            $interval(function pollInterval() {
-                spotify.getStatus()
-                    .then(function pollIntervalSuccess(status) {
-                        var syncedStatus = channel.getStatus();
-
-                        if (!status || !status.playing) {
-                            return;
-                        }
-
-                        if (status.song.url !== syncedStatus.song.url) {
-                            return;
-                        }
-
-                        _.defaultsDeep(status, syncedStatus);
-
-                        syncedStatus.playingPosition = player.calculatePlayingPosition(syncedStatus);
-
-                        player.handleStatusChange(status, syncedStatus);
-
-                        channel.setStatus(syncedStatus);
+        function updateChannelStatus(status) {
+            if (channel.needsToUpdateServer(status)) {
+                spotify.getImage(status)
+                    .then(function(data) {
+                        status.song.image = data.url;
+                        channel.setStatus(status);
+                        channel.setServerChannel(channel.get());
                     });
-            }, 2000);
+            } else {
+                channel.setStatus(status);
+            }
+        }
+
+        /**
+         * If a listener gets desync by ads or any other reason => resync.
+         * With the exception if they pause their Spotify client.
+         * @param status - Status returned by spotify.getStatus()
+         */
+        function keepClientInSync(status) {
+            var syncedStatus = channel.getStatus();
+
+            if (!status || !status.playing) {
+                return;
+            }
+
+            _.defaultsDeep(status, syncedStatus);
+
+            syncedStatus.playingPosition = player.calculatePlayingPosition(syncedStatus);
+            player.handleStatusChange(status, syncedStatus);
+
+            channel.setStatus(syncedStatus);
         }
 
         function subscribeToUpdates() {
@@ -96,6 +93,7 @@
         function cancelSubscription() {
             ctrl.inSync = false;
             subscription.cancel();
+            $interval.cancel(pollInterval);
             spotify.pause();
         }
 
