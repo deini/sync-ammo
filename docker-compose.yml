@@ -10,7 +10,7 @@ rethinkdb:
 node:
   build: ./dockerfiles/node
   ports:
-    - "3000:3000"
+    - "4343:443"
   working_dir: /code
   volumes:
     - .:/code
@@ -19,5 +19,5 @@ node:
   restart: always
   environment:
     - VIRTUAL_HOST=sync.ammo.io
-    - VIRTUAL_PORT=80
+    - VIRTUAL_PROTO=https
   env_file: .env
