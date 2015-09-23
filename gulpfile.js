@@ -1,10 +1,12 @@
 // Dependencies
-var concat         = require('gulp-concat'),
+var autoprefixer   = require('gulp-autoprefixer'),
+    concat         = require('gulp-concat'),
     del            = require('del'),
     flatten        = require('gulp-flatten'),
     gulp           = require('gulp'),
     mainBowerFiles = require('main-bower-files'),
     minifyCss      = require('gulp-minify-css'),
+    ngAnnotate     = require('gulp-ng-annotate'),
     runSequence    = require('run-sequence'),
     sass           = require('gulp-sass'),
     templateCache  = require('gulp-angular-templatecache'),
@@ -61,6 +63,7 @@ gulp.task('styles', function() {
             style: 'compressed',
             includePaths: paths.vendorStyles
         }))
+        .pipe(autoprefixer())
         .pipe(gulp.dest(paths.build + '/css'));
 });
 
@@ -97,6 +100,27 @@ gulp.task('clean', function(done) {
 });
 
 /**
+ * Uglify JS
+ */
+gulp.task('uglify', function() {
+    return gulp
+        .src(paths.build + '/**/*.js')
+        .pipe(ngAnnotate())
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.build));
+});
+
+/**
+ * Minify CSS
+ */
+gulp.task('minifyCss', function() {
+    return gulp
+        .src(paths.build + '/**/*.css')
+        .pipe(minifyCss())
+        .pipe(gulp.dest(paths.build));
+});
+
+/**
  * Build entire app.
  */
 gulp.task('build', function(done) {
@@ -107,25 +131,17 @@ gulp.task('build', function(done) {
     );
 });
 
-/**
- * Uglify JS
+/*
+ * Prepare everything for prod
  */
-gulp.task('uglify', function() {
-    return gulp
-        .src(paths.build + '/**/*.js')
-        .pipe(uglify())
-        .pipe(gulp.dest(paths.dist));
+gulp.task('deploy', function(done) {
+    runSequence(
+        'build',
+        ['uglify', 'minifyCss'],
+        done
+    );
 });
 
-/**
- * Minify CSS
- */
-gulp.task('minifyCss', function() {
-    return gulp
-        .src(paths.build + '/**/*.css')
-        .pipe(minifyCss())
-        .pipe(gulp.dest(paths.dist));
-});
 
 /**
  * File watcher.

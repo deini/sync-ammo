@@ -2,7 +2,7 @@
   "apps" : [{
     "name"        : "sync-ammo",
     "script"      : "/code/app.js",
-    "watch"       : ["/code/backend", "/code/build"],
+    "watch"       : ["/code/backend", "/code/build", "/code/app.js"],
     "log_date_format"  : "YYYY-MM-DD HH:mm"
   }]
 }
