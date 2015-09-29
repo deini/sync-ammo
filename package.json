@@ -11,6 +11,7 @@
     "faye": "^1.1.2",
     "lodash": "^3.10.1",
     "session-rethinkdb": "^1.0.6",
+    "shortid": "^2.2.2",
     "thinky": "^2.1.6"
   },
   "devDependencies": {

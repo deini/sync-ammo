@@ -1,5 +1,6 @@
-var thinky = require('../util/thinky'),
-    type   = thinky.type;
+var shortid = require('shortid'),
+    thinky  = require('../util/thinky'),
+    type    = thinky.type;
 
 var Channel = thinky.createModel('Channel', {
     id             : type.string(),
@@ -22,6 +23,14 @@ var Channel = thinky.createModel('Channel', {
         },
         updatedAt      : type.date()
     }
+});
+
+Channel.pre('save', function(next) {
+    if (!this.id) {
+        this.id = shortid.generate();
+    }
+
+    next();
 });
 
 module.exports = Channel;
