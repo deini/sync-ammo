@@ -19,7 +19,7 @@
             'sync-ammo.player.service',
             'sync-ammo.pubsub.service',
             'sync-ammo.spotify.service',
-            'sync-ammo.time.service',
+            'sync-ammo.time.service'
 
             // Directives
 
@@ -31,7 +31,7 @@
         .run(function appRun($log, $rootScope) {
             $rootScope
                 .$on('$stateChangeError', function stateChangeError(event, toState, toParams, fromState, fromParams, error) {
-                    $log.error('Error in state transistion: ', error);
+                    $log.error('Error in state transition: ', error);
                 });
         });
 })();

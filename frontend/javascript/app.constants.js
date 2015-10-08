@@ -6,11 +6,11 @@ angular.module('sync-ammo.constants', [])
             },
             method: 'GET'
         },
-        EXTENSION_ID: 'opejcnahjldejgcoegkepenfbomiejic',
         HOST: 'https://tpcaahshvs.spotilocal.com:',
         OAUTH_URI: 'http://open.spotify.com/token',
         REMOTE_PATH: '/remote',
         STARTING_PORT: 4370,
         TOKEN_PATH: '/simplecsrf/token.json?&ref=&cors='
     })
-    .constant('PUB_SUB', '/faye');
+    .constant('PUB_SUB', '/faye')
+    .constant('EXTENSION_ID', 'opejcnahjldejgcoegkepenfbomiejic');

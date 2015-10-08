@@ -5,11 +5,14 @@
     <title>Sync ammo</title>
     <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css" type="text/css" media="screen"/>
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/opejcnahjldejgcoegkepenfbomiejic">
 </head>
 <body>
 <div ng-app="sync-ammo" class="container">
     <div ui-view="main"></div>
 </div>
+
+<button onclick="chrome.webstore.install('https://chrome.google.com/webstore/detail/opejcnahjldejgcoegkepenfbomiejic', function(data) { console.log('Success', data); }, function(data) { console.log('Catch:', data)})" id="install-button">Add to Chrome</button>
 
 <script src="js/vendor.js"></script>
 <script src="js/templates.js"></script>
