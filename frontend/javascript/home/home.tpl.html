@@ -3,4 +3,8 @@
 
 <p ng-if="!homeController.isExtensionInstalled">To get started, you'll need to <a href="#" ng-click="homeController.installExtension($event)">download</a> our chrome extension and open the spotify desktop app.</p>
 
-<button class="waves-effect waves-light btn" ng-click="homeController.createChannel()">Host a Channel</button>
+<button ng-if="homeController.isExtensionInstalled"
+        class="waves-effect waves-light btn"
+        ng-click="homeController.createChannel()">
+        Host a Channel
+</button>
