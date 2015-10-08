@@ -23,7 +23,6 @@
 
                 $window.chrome.webstore.install(EXTENSION.url,
                     function successInstall() {
-                        Notification.success('Extension installed successfully.');
                         $window.location.reload();
                     },
                     function failedInstall() {
