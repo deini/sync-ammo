@@ -10,7 +10,8 @@
             var service = {
                 install: install,
                 isChrome: isChrome,
-                isInstalled: isInstalled
+                isInstalled: isInstalled,
+                notifyNotInstalled: notifyNotInstalled
             };
 
             function isChrome() {
@@ -42,6 +43,10 @@
                 });
 
                 return deferred.promise;
+            }
+
+            function notifyNotInstalled() {
+                Notification.error({ message: 'Extension not Installed', delay: null });
             }
 
             return service;

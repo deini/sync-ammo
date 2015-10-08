@@ -1,3 +1,8 @@
+<p class="card-panel red accent-2 white-text"
+   ng-if="!channelController.isExtensionInstalled">
+   To get started, you'll need to <a href="#" ng-click="channelController.installExtension($event)">download</a> our chrome extension and open the Spotify desktop app.
+</p>
+
 <header class="valign-wrapper">
     <h2 ng-if="!channelController.isDj">Now Playing</h2>
     <div class="valign-wrapper" ng-if="channelController.isDj">
@@ -12,7 +17,6 @@
         </ng-pluralize>
     </h5>
 </header>
-
 
 <!--<img class="channel-shareArrow" src="http://www.thai2english.com/img/drawn-up-arrow.png" />-->
 <!--<h5>Share this page to invite friends to this channel.</h5>-->

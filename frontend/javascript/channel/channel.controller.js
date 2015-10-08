@@ -5,6 +5,7 @@
         .module('sync-ammo.channel.controller', [
             'sync-ammo.auth.service',
             'sync-ammo.channel.service',
+            'sync-ammo.extension.service',
             'sync-ammo.player.service',
             'sync-ammo.pubsub.service',
             'sync-ammo.spotify.service',
@@ -12,7 +13,7 @@
         ])
         .controller('ChannelController', ChannelController);
 
-    function ChannelController($interval, $state, $stateParams, auth, channel, player, pubsub, spotify) {
+    function ChannelController($interval, $state, $stateParams, auth, channel, extension, isExtensionInstalled, player, pubsub, spotify) {
         var ctrl = this,
             pollInterval,
             subscription;
@@ -21,10 +22,17 @@
         ctrl.channel = channel.get;
         ctrl.cancelSubscription = cancelSubscription;
         ctrl.reSubscribe = reSubscribe;
+        ctrl.isExtensionInstalled = isExtensionInstalled;
+        ctrl.installExtension = extension.install;
 
         init();
 
         function init() {
+            if (!ctrl.isExtensionInstalled) {
+
+                return;
+            }
+
             if (ctrl.channel().dj === auth.getUser().id) {
                 ctrl.isDj = true;
 
