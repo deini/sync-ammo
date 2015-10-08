@@ -3,6 +3,7 @@
 
     angular
         .module('sync-ammo.home.state', [
+            'sync-ammo.extension.service',
             'sync-ammo.home.controller',
             'sync-ammo.templates',
             'ui.router'
@@ -13,6 +14,11 @@
         $stateProvider
             .state('sync-ammo.home', {
                 url: '/',
+                resolve: {
+                    isExtensionInstalled: function(extension) {
+                        return extension.isInstalled();
+                    }
+                },
                 views: {
                     'main@': {
                         templateUrl: 'home/home.tpl.html',

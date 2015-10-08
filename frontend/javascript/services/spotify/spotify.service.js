@@ -6,7 +6,7 @@
             'sync-ammo.constants',
             'sync-ammo.time.service'
         ])
-        .factory('spotify', function spotifyService($http, $q, $timeout, EXTENSION_ID, SPOTIFY, time) {
+        .factory('spotify', function spotifyService($http, $q, $timeout, EXTENSION, SPOTIFY, time) {
             var initialized = false,
                 service = {
                     getStatus: getStatus,
@@ -164,7 +164,7 @@
                     params: tokens
                 });
 
-                chrome.runtime.sendMessage(EXTENSION_ID, options, function(response) {
+                chrome.runtime.sendMessage(EXTENSION.id, options, function(response) {
                     if (response.error) {
                         deferred.reject(response.error);
                     }

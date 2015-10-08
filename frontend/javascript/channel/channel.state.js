@@ -4,6 +4,7 @@
     angular
         .module('sync-ammo.channel.state', [
             'sync-ammo.channel.controller',
+            'sync-ammo.extension.service',
             'sync-ammo.channel.service',
             'sync-ammo.templates',
             'ui.router'
@@ -23,6 +24,9 @@
                             .catch(function(err) {
                                 console.log(err);
                             });
+                    },
+                    isExtensionInstalled: function(extension) {
+                        return extension.isInstalled();
                     }
                 },
                 views: {

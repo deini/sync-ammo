@@ -19,8 +19,7 @@ var paths = {
     html         : ['frontend/javascript/**/*.html'],
     index        : ['index.html'],
     scripts      : ['frontend/javascript/**/*.js'],
-    styles       : ['frontend/sass/**/*.scss'],
-    vendorStyles : ['bower_components/materialize/sass']
+    styles       : ['frontend/sass/**/*.scss']
 };
 
 /**
@@ -48,7 +47,12 @@ gulp.task('vendor-scripts', function() {
  */
 gulp.task('vendor-styles', function() {
     return gulp
-        .src(mainBowerFiles('**/*.css'), { base: 'bower_components' })
+        .src(mainBowerFiles({
+            filter: '**/*.css',
+            overrides: {
+                materialize: { main: [] }
+            }
+        }), { base: 'bower_components' })
         .pipe(concat('vendor.css'))
         .pipe(gulp.dest(paths.build + '/css'));
 });
@@ -59,10 +63,7 @@ gulp.task('vendor-styles', function() {
 gulp.task('styles', function() {
     return gulp
         .src(paths.styles)
-        .pipe(sass({
-            style: 'compressed',
-            includePaths: paths.vendorStyles
-        }))
+        .pipe(sass({ style: 'compressed' }))
         .pipe(autoprefixer())
         .pipe(gulp.dest(paths.build + '/css'));
 });

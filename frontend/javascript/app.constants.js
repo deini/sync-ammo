@@ -13,4 +13,7 @@ angular.module('sync-ammo.constants', [])
         TOKEN_PATH: '/simplecsrf/token.json?&ref=&cors='
     })
     .constant('PUB_SUB', '/faye')
-    .constant('EXTENSION_ID', 'opejcnahjldejgcoegkepenfbomiejic');
+    .constant('EXTENSION', {
+        id: 'opejcnahjldejgcoegkepenfbomiejic',
+        url: 'https://chrome.google.com/webstore/detail/opejcnahjldejgcoegkepenfbomiejic'
+    });

@@ -1,6 +1,6 @@
 <h1>Listen with me</h1>
 <h4>Create or join a channel to sync up with a DJ.</h4>
 
-<p>To get started, you'll need to <a href="https://chrome.google.com/webstore/detail/ammo-inteceptor/opejcnahjldejgcoegkepenfbomiejic">download</a> our chrome extension and open the spotify desktop app.</p>
+<p ng-if="!homeController.isExtensionInstalled">To get started, you'll need to <a href="#" ng-click="homeController.installExtension($event)">download</a> our chrome extension and open the spotify desktop app.</p>
 
 <button class="waves-effect waves-light btn" ng-click="homeController.createChannel()">Host a Channel</button>
