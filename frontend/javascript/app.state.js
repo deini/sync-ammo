@@ -17,8 +17,8 @@
             .state('sync-ammo', {
                 abstract: true,
                 resolve: {
-                    user: function (auth) {
-                        auth.login();
+                    user: function(auth) {
+                        return auth.login();
                     }
                 },
                 onEnter: function($state, extension) {

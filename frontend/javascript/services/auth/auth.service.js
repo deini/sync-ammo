@@ -21,7 +21,7 @@
                     return $q.when(service.getUser());
                 }
 
-                $http.get('/api/user')
+                return $http.get('/api/user')
                     .then(function(data) {
                         user = data.data;
 
