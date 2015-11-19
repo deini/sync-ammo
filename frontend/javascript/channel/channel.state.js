@@ -14,7 +14,7 @@
     function channelState($stateProvider) {
         $stateProvider
             .state('sync-ammo.channel', {
-                url: '/channel/:channelId',
+                url: 'channel/:channelId',
                 resolve: {
                     currentChannel: function($stateParams, channel) {
                         return channel.fetch($stateParams.channelId)

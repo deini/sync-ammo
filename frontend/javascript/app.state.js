@@ -3,6 +3,7 @@
 
     angular
         .module('sync-ammo.app.state', [
+            'sync-ammo.app.controller',
             'sync-ammo.auth.service',
             'sync-ammo.extension.service',
             'sync-ammo.unsupported.state',
@@ -15,15 +16,15 @@
     function syncAmmoState($stateProvider) {
         $stateProvider
             .state('sync-ammo', {
-                abstract: true,
+                url: '/',
+                views: {
+                    'main@': {
+                        controller: 'AppController as appController'
+                    }
+                },
                 resolve: {
                     user: function(auth) {
                         return auth.login();
-                    }
-                },
-                onEnter: function($state, extension) {
-                    if (!extension.isChrome()) {
-                        $state.go('unsupported');
                     }
                 }
             });

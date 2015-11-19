@@ -13,7 +13,7 @@
     function homeState($stateProvider) {
         $stateProvider
             .state('sync-ammo.home', {
-                url: '/',
+                url: 'home',
                 resolve: {
                     isExtensionInstalled: function(extension) {
                         return extension.isInstalled();

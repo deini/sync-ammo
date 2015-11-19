@@ -6,7 +6,7 @@
             'sync-ammo.constants',
             'ui-notification'
         ])
-        .factory('extension', function playerService($q, $window, EXTENSION, Notification) {
+        .factory('extension', function playerService($q, $state, $window, EXTENSION, Notification) {
             var service = {
                 install: install,
                 isChrome: isChrome,
@@ -14,8 +14,13 @@
                 notifyNotInstalled: notifyNotInstalled
             };
 
+            // https://coderwall.com/p/i817wa/one-line-function-to-detect-mobile-devices-with-javascript
+            function isMobileDevice() {
+                return (typeof window.orientation !== 'undefined') || (navigator.userAgent.indexOf('IEMobile') !== -1);
+            }
+
             function isChrome() {
-                return !_.isUndefined($window.chrome);
+                return !isMobileDevice() && !_.isUndefined($window.chrome);
             }
 
             function install($event) {
