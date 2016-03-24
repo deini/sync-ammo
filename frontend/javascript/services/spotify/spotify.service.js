@@ -161,7 +161,8 @@
                 var deferred = $q.defer();
 
                 options = _.merge(options, SPOTIFY.DEFAULT_AJAX_OPTIONS, {
-                    params: tokens
+                    params: tokens,
+                    debug: true
                 });
 
                 chrome.runtime.sendMessage(EXTENSION.id, options, function(response) {
